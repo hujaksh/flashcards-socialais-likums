@@ -1,0 +1,811 @@
+<!doctype html>
+<html lang="lv">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sociālo pakalpojumu un sociālās palīdzības likums — flashcards</title>
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --panel: #ffffff;
+      --text: #172033;
+      --muted: #5f6b80;
+      --border: #dfe5ef;
+      --primary: #3157d5;
+      --primary-dark: #2343ad;
+      --good: #16794c;
+      --bad: #b3261e;
+      --soft-good: #e8f5ee;
+      --soft-bad: #faeaea;
+      --shadow: 0 18px 50px rgba(24, 37, 64, 0.12);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #101522;
+        --panel: #182033;
+        --text: #f2f5fb;
+        --muted: #a9b4ca;
+        --border: #2c3750;
+        --primary: #8ea6ff;
+        --primary-dark: #b4c3ff;
+        --good: #7bd9a5;
+        --bad: #ff9a95;
+        --soft-good: #163625;
+        --soft-bad: #3a1d20;
+        --shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
+      }
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top left, rgba(49, 87, 213, .12), transparent 28rem), var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 22px;
+    }
+    main {
+      width: min(980px, 100%);
+    }
+    header {
+      margin: 18px 0 18px;
+    }
+    h1 {
+      font-size: clamp(1.45rem, 4vw, 2.35rem);
+      margin: 0 0 8px;
+      letter-spacing: -0.03em;
+    }
+    .subtitle {
+      color: var(--muted);
+      margin: 0;
+      line-height: 1.45;
+      font-size: 1rem;
+    }
+    .top-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin: 18px 0;
+    }
+    .stat {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 14px;
+      box-shadow: 0 8px 24px rgba(24, 37, 64, 0.05);
+    }
+    .stat-label {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-bottom: 7px;
+    }
+    .stat-value {
+      font-size: 1.35rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+    .progress-wrap {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+    .progress-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 0.92rem;
+      margin-bottom: 10px;
+    }
+    .progress-bar {
+      width: 100%;
+      height: 14px;
+      border-radius: 999px;
+      background: rgba(127, 139, 161, 0.22);
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--primary), var(--good));
+      border-radius: inherit;
+      transition: width 180ms ease;
+    }
+    .app {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      padding: clamp(18px, 4vw, 34px);
+    }
+    .mode-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 18px;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .mode-buttons, .utility-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .pill {
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text);
+      border-radius: 999px;
+      padding: 9px 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .pill.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: white;
+    }
+    @media (prefers-color-scheme: dark) {
+      .pill.active {
+        color: #101522;
+      }
+    }
+    .card {
+      min-height: 330px;
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: clamp(20px, 5vw, 42px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background:
+        linear-gradient(135deg, rgba(49, 87, 213, 0.06), transparent 45%),
+        var(--panel);
+      position: relative;
+      overflow: hidden;
+    }
+    .card::after {
+      content: "";
+      position: absolute;
+      right: -70px;
+      bottom: -90px;
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      background: rgba(49, 87, 213, 0.07);
+      pointer-events: none;
+    }
+    .card-meta {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-bottom: 18px;
+    }
+    .question {
+      position: relative;
+      z-index: 1;
+      font-size: clamp(1.45rem, 4.8vw, 2.45rem);
+      font-weight: 850;
+      letter-spacing: -0.035em;
+      line-height: 1.08;
+      margin: 0;
+    }
+    .answer {
+      position: relative;
+      z-index: 1;
+      margin-top: 26px;
+      padding: 18px;
+      border-radius: 18px;
+      background: rgba(127, 139, 161, 0.12);
+      border: 1px solid var(--border);
+      line-height: 1.55;
+      font-size: clamp(1.05rem, 2.6vw, 1.25rem);
+    }
+    .hidden {
+      display: none !important;
+    }
+    .actions {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .actions.second {
+      grid-template-columns: repeat(3, 1fr);
+      margin-top: 10px;
+    }
+    button {
+      font-family: inherit;
+    }
+    .btn {
+      border: 0;
+      border-radius: 16px;
+      padding: 14px 16px;
+      font-weight: 800;
+      cursor: pointer;
+      background: var(--primary);
+      color: white;
+      font-size: 1rem;
+      transition: transform 80ms ease, filter 120ms ease;
+    }
+    @media (prefers-color-scheme: dark) {
+      .btn {
+        color: #101522;
+      }
+    }
+    .btn:hover, .pill:hover {
+      filter: brightness(1.03);
+    }
+    .btn:active, .pill:active {
+      transform: translateY(1px);
+    }
+    .btn.secondary {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn.good {
+      background: var(--soft-good);
+      color: var(--good);
+      border: 1px solid rgba(22, 121, 76, 0.25);
+    }
+    .btn.bad {
+      background: var(--soft-bad);
+      color: var(--bad);
+      border: 1px solid rgba(179, 38, 30, 0.25);
+    }
+    .empty {
+      text-align: center;
+      padding: 38px 18px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    .footer-note {
+      color: var(--muted);
+      font-size: 0.86rem;
+      margin-top: 14px;
+      line-height: 1.5;
+    }
+    a {
+      color: var(--primary);
+    }
+    @media (max-width: 720px) {
+      body {
+        padding: 14px;
+      }
+      .top-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .actions, .actions.second {
+        grid-template-columns: 1fr;
+      }
+      .mode-row {
+        align-items: stretch;
+      }
+      .mode-buttons, .utility-buttons {
+        width: 100%;
+      }
+      .pill {
+        flex: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>Sociālo pakalpojumu un sociālās palīdzības likums</h1>
+      <p class="subtitle">Flashcards mācībām. Progress saglabājas šajā pārlūkā — bez konta un bez instalēšanas.</p>
+    </header>
+
+    <section class="top-grid" aria-label="Statistika">
+      <div class="stat">
+        <div class="stat-label">Izietas</div>
+        <div class="stat-value" id="answeredStat">0 / 50</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Zināju</div>
+        <div class="stat-value" id="knownStat">0</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Nezināju</div>
+        <div class="stat-value" id="unknownStat">0</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Precizitāte</div>
+        <div class="stat-value" id="accuracyStat">0%</div>
+      </div>
+    </section>
+
+    <section class="progress-wrap">
+      <div class="progress-top">
+        <span id="progressText">Progress: 0%</span>
+        <span id="modeText">Režīms: visas kartītes</span>
+      </div>
+      <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+    </section>
+
+    <section class="app">
+      <div class="mode-row">
+        <div class="mode-buttons">
+          <button class="pill active" id="allModeBtn">Visas kartītes</button>
+          <button class="pill" id="mistakesModeBtn">Atkārtot nezinātās</button>
+        </div>
+        <div class="utility-buttons">
+          <button class="pill" id="shuffleBtn">Sajaukt</button>
+          <button class="pill" id="resetBtn">Sākt no jauna</button>
+        </div>
+      </div>
+
+      <div id="emptyState" class="empty hidden">
+        Nav nevienas “Nezināju” kartītes. Pārslēdzies uz “Visas kartītes” vai sāc no jauna.
+      </div>
+
+      <article class="card" id="card">
+        <div class="card-meta">
+          <span id="cardCounter">Kartīte 1 / 50</span>
+          <span id="cardStatus">Nav atbildēta</span>
+        </div>
+        <p class="question" id="questionText"></p>
+        <div class="answer hidden" id="answerText"></div>
+      </article>
+
+      <div class="actions">
+        <button class="btn" id="revealBtn">Rādīt atbildi</button>
+        <button class="btn secondary" id="nextBtn">Nākamā</button>
+      </div>
+      <div class="actions second">
+        <button class="btn secondary" id="prevBtn">Atpakaļ</button>
+        <button class="btn good" id="knownBtn">Zināju</button>
+        <button class="btn bad" id="unknownBtn">Nezināju</button>
+      </div>
+
+      <p class="footer-note">
+        Avots: <a href="https://likumi.lv/ta/id/68488-socialo-pakalpojumu-un-socialas-palidzibas-likums" target="_blank" rel="noopener">likumi.lv — Sociālo pakalpojumu un sociālās palīdzības likums</a>.
+        Šis ir mācību palīglīdzeklis, nevis oficiāls likuma teksts.
+      </p>
+    </section>
+  </main>
+
+  <script>
+    const cards = [
+  {
+    "q": "Kāds ir Sociālo pakalpojumu un sociālās palīdzības likuma mērķis?",
+    "a": "Noteikt sociālo pakalpojumu un sociālās palīdzības sniegšanas un saņemšanas principus, saņēmēju loku, kā arī samaksas un finansēšanas principus."
+  },
+  {
+    "q": "Ko likumā nozīmē “klients”?",
+    "a": "Persona, kas saņem sociālos pakalpojumus vai sociālo palīdzību."
+  },
+  {
+    "q": "Kas ir pašvaldības sociālais dienests?",
+    "a": "Pašvaldības izveidota iestāde, kas sniedz sociālo palīdzību, organizē un sniedz sociālos pakalpojumus pašvaldības iedzīvotājiem."
+  },
+  {
+    "q": "Kādas ir pamatvajadzības šā likuma izpratnē?",
+    "a": "Ēdiens, apģērbs, mājoklis, veselības aprūpe un obligātā izglītība."
+  },
+  {
+    "q": "Kas ir sociālā aprūpe?",
+    "a": "Pasākumu kopums pamatvajadzību apmierināšanai personām, kurām vecuma vai funkcionālu traucējumu dēļ ir grūtības sevi aprūpēt."
+  },
+  {
+    "q": "Kas ir sociālā rehabilitācija?",
+    "a": "Pasākumu kopums sociālās funkcionēšanas spēju atjaunošanai vai uzlabošanai, lai persona varētu iekļauties sabiedrībā."
+  },
+  {
+    "q": "Kas ir aprūpe mājās?",
+    "a": "Pakalpojumi personas mājās pašaprūpes un aprūpes vajadzību nodrošināšanai, ja persona objektīvu apstākļu dēļ nevar sevi aprūpēt."
+  },
+  {
+    "q": "Kas ir funkcionāls traucējums?",
+    "a": "Slimības, traumas vai iedzimta defekta izraisīts fizisks vai garīgs traucējums, kas ierobežo spējas strādāt, aprūpēt sevi un iekļauties sabiedrībā."
+  },
+  {
+    "q": "Kas ir mājsaimniecība?",
+    "a": "Viena persona, kas saimnieko atsevišķi, vai vairākas personas, kas dzīvo vienā mājoklī un kopīgi sedz izdevumus."
+  },
+  {
+    "q": "Kāds ir sociālo pakalpojumu sniegšanas pamatprincips?",
+    "a": "Tos sniedz tikai pēc personas individuālo vajadzību un resursu novērtējuma."
+  },
+  {
+    "q": "Kur prioritāri jānodrošina sociālie pakalpojumi?",
+    "a": "Personas dzīvesvietā vai iespējami tuvu tai. Institūcija ir risinājums tikai tad, ja ar tuvākiem pakalpojumiem nepietiek."
+  },
+  {
+    "q": "Kāds ir sociālās palīdzības sniegšanas pamatprincips?",
+    "a": "Tā balstās uz personas vai mājsaimniecības ienākumu un īpašuma izvērtējumu, paredzot klienta līdzdarbību, izņemot krīzes situāciju."
+  },
+  {
+    "q": "Vai uz sociālās palīdzības pabalstiem var vērst piedziņu?",
+    "a": "Nē, uz sociālās palīdzības pabalstiem piedziņu vērst nevar."
+  },
+  {
+    "q": "Nosauc vienu klienta tiesību piemēru.",
+    "a": "Klientam ir tiesības bez maksas saņemt informāciju par sociālajiem pakalpojumiem un sociālo palīdzību."
+  },
+  {
+    "q": "Kādas tiesības klientam ir atteikuma gadījumā?",
+    "a": "Saņemt pamatotu rakstveida atteikumu un pārsūdzēt lēmumu likumā noteiktajā kārtībā."
+  },
+  {
+    "q": "Nosauc vienu klienta pienākumu.",
+    "a": "Aktīvi iesaistīties savas problēmas risināšanā un pildīt līdzdarbības pienākumus."
+  },
+  {
+    "q": "Kāds ir klienta pienākums attiecībā uz informāciju?",
+    "a": "Sniegt ziņas par sevi, sadarboties ar sociālo dienestu un pildīt tā ieteikumus."
+  },
+  {
+    "q": "Kas parasti maksā par sociālās aprūpes un rehabilitācijas pakalpojumiem?",
+    "a": "Klients vai viņa apgādnieks, ja likumā nav noteikts citādi."
+  },
+  {
+    "q": "Kas notiek, ja klients vai apgādnieks nevar samaksāt par sociālās aprūpes vai rehabilitācijas pakalpojumu?",
+    "a": "Pakalpojuma izmaksas sedz no pašvaldības budžeta Ministru kabineta noteiktajā kārtībā."
+  },
+  {
+    "q": "Kāds ir pašvaldības galvenais pienākums sociālo pakalpojumu jomā?",
+    "a": "Nodrošināt sociālo darbu, plānot resursus un radīt vidi, kurā persona var saņemt vajadzībām atbilstošus pakalpojumus un palīdzību."
+  },
+  {
+    "q": "Kāds sociālais pakalpojums pašvaldībai jānodrošina personām ar smagiem funkcionāliem traucējumiem?",
+    "a": "Aprūpe mājās."
+  },
+  {
+    "q": "Kam pašvaldībai jānodrošina krīzes centra pakalpojums?",
+    "a": "Krīzes situācijā nonākušām personām."
+  },
+  {
+    "q": "Kam paredzēts grupu mājas jeb dzīvokļa pakalpojums?",
+    "a": "Personām ar garīga rakstura traucējumiem."
+  },
+  {
+    "q": "Kam paredzēts patversmes vai naktspatversmes pakalpojums?",
+    "a": "Personām bez noteiktas dzīvesvietas un krīzes situācijā nonākušām personām."
+  },
+  {
+    "q": "Cik sociālā darba speciālistiem jābūt pašvaldībā?",
+    "a": "Vismaz vienam sociālā darba speciālistam uz katriem 1000 iedzīvotājiem."
+  },
+  {
+    "q": "Kādi ir pašvaldības sociālā dienesta galvenie uzdevumi?",
+    "a": "Veikt sociālo darbu, novērtēt klientu vajadzības un resursus, sniegt vai organizēt sociālos pakalpojumus un sniegt sociālo palīdzību."
+  },
+  {
+    "q": "Kas nodrošina vairākus valsts finansētus sociālos pakalpojumus?",
+    "a": "Valsts, atbilstoši gadskārtējā valsts budžeta likumā piešķirtajiem līdzekļiem."
+  },
+  {
+    "q": "Nosauc vienu valsts nodrošinātu pakalpojumu.",
+    "a": "Piemēram, profesionālās piemērotības noteikšana un profesionālā rehabilitācija personām ar funkcionāliem traucējumiem vai invaliditāti."
+  },
+  {
+    "q": "Kas jāievēro sociālo pakalpojumu sniedzējam?",
+    "a": "Pakalpojuma sniedzējam jābūt reģistrētam sociālo pakalpojumu sniedzēju reģistrā, ja tas sniedz likumā noteiktos sociālos pakalpojumus."
+  },
+  {
+    "q": "Kāds ir sociālās aprūpes pakalpojumu mērķis?",
+    "a": "Nodrošināt, lai nepazeminās personas dzīves kvalitāte, ja tā vecuma vai funkcionālo traucējumu dēļ to nevar nodrošināt pati."
+  },
+  {
+    "q": "Kāds ir sociālās rehabilitācijas pakalpojumu mērķis?",
+    "a": "Novērst vai mazināt invaliditātes, darbnespējas, brīvības atņemšanas, atkarības, vardarbības vai citu faktoru negatīvās sociālās sekas."
+  },
+  {
+    "q": "Cik aprūpes līmeņi noteikti likumā?",
+    "a": "Četri aprūpes līmeņi."
+  },
+  {
+    "q": "Kā raksturo 1. aprūpes līmeni?",
+    "a": "Personas spējas ir mēreni ierobežotas; nepieciešams minimāls personāla atbalsts noteiktu stundu skaitu nedēļā."
+  },
+  {
+    "q": "Kā raksturo 4. aprūpes līmeni?",
+    "a": "Personas spējas ir ļoti smagi ierobežotas; persona pilnībā aprūpējama un uzraugāma visu diennakti."
+  },
+  {
+    "q": "Kam ir tiesības uz sociālo rehabilitāciju?",
+    "a": "Piemēram, personām ar invaliditāti vai funkcionāliem traucējumiem, personām pēc brīvības atņemšanas soda, personām ar atkarībām, vardarbībā cietušām personām un noteiktām bērnu grupām."
+  },
+  {
+    "q": "Kādos veidos sniedz sociālās aprūpes un rehabilitācijas pakalpojumus?",
+    "a": "Dzīvesvietā, ilgstošas aprūpes un rehabilitācijas institūcijās vai īslaicīgu pakalpojumu institūcijās."
+  },
+  {
+    "q": "Kas jāņem vērā, nosakot aprūpes mājās nepieciešamību un apjomu?",
+    "a": "Ģimenes locekļu iespējas aprūpēt personu, funkcionālo traucējumu smagums, citi saņemtie pakalpojumi un objektīvi apstākļi."
+  },
+  {
+    "q": "Kas ir individuālās sociālās rehabilitācijas plāns?",
+    "a": "Plāns, ko sociālais dienests vai pakalpojuma sniedzējs izstrādā katrai sociāli rehabilitējamai personai, lai veicinātu iekļaušanos sabiedrībā."
+  },
+  {
+    "q": "Kam ir tiesības uz tehniskajiem palīglīdzekļiem?",
+    "a": "Personām ar ilgstošiem vai nepārejošiem organisma funkciju traucējumiem vai anatomiskiem defektiem, ja ir ārstniecības personas atzinums."
+  },
+  {
+    "q": "Kas ir atbalsta personas lēmumu pieņemšanā pakalpojuma mērķis?",
+    "a": "Palīdzēt pilngadīgai personai ar garīga rakstura traucējumiem pieņemt lēmumus, neietekmējot tās gribu, izvēli un lēmumus."
+  },
+  {
+    "q": "Kas ir sociālās palīdzības mērķis?",
+    "a": "Materiāli atbalstīt zemu ienākumu mājsaimniecības, nodrošināt GMI līmeni, segt mājokļa izdevumus un palīdzēt krīzes situācijās."
+  },
+  {
+    "q": "Kāds ir garantēto minimālo ienākumu slieksnis?",
+    "a": "22% no ienākumu mediānas."
+  },
+  {
+    "q": "Kāds ir trūcīgas mājsaimniecības ienākumu slieksnis?",
+    "a": "50% no ienākumu mediānas."
+  },
+  {
+    "q": "Kā pašvaldība nosaka maznodrošinātas mājsaimniecības slieksni?",
+    "a": "Ne augstāku par 80% no ienākumu mediānas un ne zemāku par trūcīgas mājsaimniecības slieksni."
+  },
+  {
+    "q": "Kādi ir pamata sociālās palīdzības pabalsti?",
+    "a": "Garantētā minimālā ienākuma pabalsts un mājokļa pabalsts."
+  },
+  {
+    "q": "Kādi ir papildu sociālās palīdzības pabalsti?",
+    "a": "Pabalsts atsevišķu izdevumu apmaksai un pabalsts krīzes situācijā."
+  },
+  {
+    "q": "Kā izmaksā GMI pabalstu?",
+    "a": "Naudā."
+  },
+  {
+    "q": "Kad pašvaldība var atgūt nepamatoti izmaksātu sociālās palīdzības pabalstu?",
+    "a": "Ja pabalsts izmaksāts klienta vainas dēļ, piemēram, sniegta nepatiesa vai nepilnīga informācija vai nav paziņots par pārmaiņām."
+  },
+  {
+    "q": "Kāds ir sociālā darba mērķis?",
+    "a": "Palīdzēt personai, ģimenei vai personu grupai noteikt, atrisināt vai mazināt sociālās problēmas, attīstot personas resursus un iesaistot atbalsta sistēmas."
+  },
+  {
+    "q": "Ko dara sociālās palīdzības organizators?",
+    "a": "Izvērtē mājsaimniecības sociālo un materiālo situāciju, aprēķina pabalstus un informē klientus par tiesībām un līdzdarbības pienākumiem."
+  }
+];
+
+    const STORAGE_KEY = "socialo_pakalpojumu_likums_flashcards_v1";
+
+    let state = {
+      index: 0,
+      mode: "all",
+      order: cards.map((_, i) => i),
+      revealed: false,
+      answers: {}
+    };
+
+    const el = {
+      answeredStat: document.getElementById("answeredStat"),
+      knownStat: document.getElementById("knownStat"),
+      unknownStat: document.getElementById("unknownStat"),
+      accuracyStat: document.getElementById("accuracyStat"),
+      progressText: document.getElementById("progressText"),
+      progressFill: document.getElementById("progressFill"),
+      modeText: document.getElementById("modeText"),
+      allModeBtn: document.getElementById("allModeBtn"),
+      mistakesModeBtn: document.getElementById("mistakesModeBtn"),
+      shuffleBtn: document.getElementById("shuffleBtn"),
+      resetBtn: document.getElementById("resetBtn"),
+      emptyState: document.getElementById("emptyState"),
+      card: document.getElementById("card"),
+      cardCounter: document.getElementById("cardCounter"),
+      cardStatus: document.getElementById("cardStatus"),
+      questionText: document.getElementById("questionText"),
+      answerText: document.getElementById("answerText"),
+      revealBtn: document.getElementById("revealBtn"),
+      nextBtn: document.getElementById("nextBtn"),
+      prevBtn: document.getElementById("prevBtn"),
+      knownBtn: document.getElementById("knownBtn"),
+      unknownBtn: document.getElementById("unknownBtn")
+    };
+
+    function load() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+        if (saved && typeof saved === "object") {
+          state = {
+            ...state,
+            ...saved,
+            order: Array.isArray(saved.order) && saved.order.length ? saved.order : cards.map((_, i) => i),
+            answers: saved.answers || {}
+          };
+        }
+      } catch (e) {
+        console.warn("Neizdevās ielādēt saglabāto progresu", e);
+      }
+    }
+
+    function save() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    function getActiveOrder() {
+      if (state.mode === "mistakes") {
+        const missed = Object.entries(state.answers)
+          .filter(([_, value]) => value === "unknown")
+          .map(([key]) => Number(key));
+        return state.order.filter(i => missed.includes(i));
+      }
+      return state.order;
+    }
+
+    function clampIndex() {
+      const active = getActiveOrder();
+      if (state.index >= active.length) state.index = Math.max(0, active.length - 1);
+      if (state.index < 0) state.index = 0;
+    }
+
+    function stats() {
+      const values = Object.values(state.answers);
+      const known = values.filter(v => v === "known").length;
+      const unknown = values.filter(v => v === "unknown").length;
+      const answered = known + unknown;
+      const progress = Math.round((answered / cards.length) * 100);
+      const accuracy = answered ? Math.round((known / answered) * 100) : 0;
+      return { known, unknown, answered, progress, accuracy };
+    }
+
+    function statusLabel(cardIndex) {
+      const answer = state.answers[cardIndex];
+      if (answer === "known") return "Atzīmēta: zināju";
+      if (answer === "unknown") return "Atzīmēta: nezināju";
+      return "Nav atbildēta";
+    }
+
+    function render() {
+      clampIndex();
+      const active = getActiveOrder();
+      const s = stats();
+
+      el.answeredStat.textContent = `${s.answered} / ${cards.length}`;
+      el.knownStat.textContent = s.known;
+      el.unknownStat.textContent = s.unknown;
+      el.accuracyStat.textContent = `${s.accuracy}%`;
+      el.progressText.textContent = `Progress: ${s.progress}%`;
+      el.progressFill.style.width = `${s.progress}%`;
+      document.querySelector(".progress-bar").setAttribute("aria-valuenow", s.progress);
+      el.modeText.textContent = state.mode === "mistakes" ? "Režīms: atkārtot nezinātās" : "Režīms: visas kartītes";
+
+      el.allModeBtn.classList.toggle("active", state.mode === "all");
+      el.mistakesModeBtn.classList.toggle("active", state.mode === "mistakes");
+
+      if (active.length === 0) {
+        el.emptyState.classList.remove("hidden");
+        el.card.classList.add("hidden");
+        el.revealBtn.disabled = true;
+        el.nextBtn.disabled = true;
+        el.prevBtn.disabled = true;
+        el.knownBtn.disabled = true;
+        el.unknownBtn.disabled = true;
+        return;
+      }
+
+      el.emptyState.classList.add("hidden");
+      el.card.classList.remove("hidden");
+      el.revealBtn.disabled = false;
+      el.nextBtn.disabled = false;
+      el.prevBtn.disabled = false;
+      el.knownBtn.disabled = false;
+      el.unknownBtn.disabled = false;
+
+      const cardIndex = active[state.index];
+      const card = cards[cardIndex];
+
+      el.cardCounter.textContent = `Kartīte ${state.index + 1} / ${active.length}`;
+      el.cardStatus.textContent = statusLabel(cardIndex);
+      el.questionText.textContent = card.q;
+      el.answerText.textContent = card.a;
+      el.answerText.classList.toggle("hidden", !state.revealed);
+      el.revealBtn.textContent = state.revealed ? "Paslēpt atbildi" : "Rādīt atbildi";
+
+      save();
+    }
+
+    function move(step) {
+      const active = getActiveOrder();
+      if (!active.length) return;
+      state.index = (state.index + step + active.length) % active.length;
+      state.revealed = false;
+      render();
+    }
+
+    function mark(value) {
+      const active = getActiveOrder();
+      if (!active.length) return;
+      const cardIndex = active[state.index];
+      state.answers[cardIndex] = value;
+      state.revealed = true;
+      render();
+    }
+
+    function shuffle(array) {
+      const copy = [...array];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    el.revealBtn.addEventListener("click", () => {
+      state.revealed = !state.revealed;
+      render();
+    });
+
+    el.nextBtn.addEventListener("click", () => move(1));
+    el.prevBtn.addEventListener("click", () => move(-1));
+    el.knownBtn.addEventListener("click", () => mark("known"));
+    el.unknownBtn.addEventListener("click", () => mark("unknown"));
+
+    el.allModeBtn.addEventListener("click", () => {
+      state.mode = "all";
+      state.index = 0;
+      state.revealed = false;
+      render();
+    });
+
+    el.mistakesModeBtn.addEventListener("click", () => {
+      state.mode = "mistakes";
+      state.index = 0;
+      state.revealed = false;
+      render();
+    });
+
+    el.shuffleBtn.addEventListener("click", () => {
+      state.order = shuffle(cards.map((_, i) => i));
+      state.index = 0;
+      state.revealed = false;
+      render();
+    });
+
+    el.resetBtn.addEventListener("click", () => {
+      const ok = confirm("Vai tiešām dzēst progresu un sākt no jauna?");
+      if (!ok) return;
+      state = {
+        index: 0,
+        mode: "all",
+        order: cards.map((_, i) => i),
+        revealed: false,
+        answers: {}
+      };
+      save();
+      render();
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === " ") {
+        event.preventDefault();
+        state.revealed = !state.revealed;
+        render();
+      }
+      if (event.key === "ArrowRight") move(1);
+      if (event.key === "ArrowLeft") move(-1);
+      if (event.key.toLowerCase() === "z") mark("known");
+      if (event.key.toLowerCase() === "x") mark("unknown");
+    });
+
+    load();
+    render();
+  </script>
+</body>
+</html>
